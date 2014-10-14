@@ -1,0 +1,196 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Fise de lucru</title>
+	<!-- build:css css/cycletome.min.css -->	
+	<link href="css/style.css" rel='stylesheet' type='text/css' />
+	<link rel="stylesheet" type="text/css" media="screen" href="http://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/css/bootstrap-datetimepicker.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+	<!-- endbuild -->
+
+	<script type="text/javascript" src="js/lib/jquery.min.js"></script>		
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/lib/moment.js"></script>
+	<script type="text/javascript" src="js/locales/ro.js"></script>
+	<script type="text/javascript" src="http://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/master/src/js/bootstrap-datetimepicker.js"></script>
+	<!-- endbuild -->	
+</head>
+
+<body>
+	<div class="top-grids">
+		<div class="top-grids-head text-center">						
+			
+			<div class="container">
+
+				<div class="row">
+					<div class='col-sm-6'>							
+						<div class="form-inline text-left">
+							<span class="text">inceput</span>
+							<div class='input-group date' id='dateStart'>
+								<input type='text' class="form-control" />
+								<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+							</div>
+							<span class="text">sfarsit</span>
+							<div class='input-group date' id='dateEnd'>									
+								<input type='text' class="form-control" />
+								<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+							</div>
+						</div>
+					</div>						
+				</div>		
+
+				<div class="input-group" style=" margin-top:12px;">
+					<span class="input-group-addon">
+						<input type="checkbox" id="chkAllMonthDesc">
+					</span>
+					<input id="workDesc" type="text" class="form-control" disabled style="width:50%;" placeholder="descriere pentru fiecare zi a lunii">							
+				</div>				
+			</div>
+
+			<div id="pipe" style="margin-top: 20px;">					
+				<ul id="workingDays" style="list-style-type:none;"/>				
+			</div>						
+		</div>			
+
+	</div>
+
+	<script type="text/javascript">
+	$('.date').datetimepicker({
+		pickTime: false,
+		language: 'ro',		
+	})
+	.on("dp.change",function (e) {
+		onSetDate(e);   
+	});
+
+	$("#chkAllMonthDesc").change(function() {	    
+		if (!this.checked) {
+			workDescription = $("#workDesc").val();
+		}
+		else {
+			workDescription = "";
+		}
+
+		$("#workDesc").prop('disabled', !this.checked);	    
+		$(".input_work_desc").prop('disabled', this.checked);
+	});
+
+	var workDescription = "";
+	$("#workDesc").keyup(function() {
+		workDescription = $(this).val();
+
+		generateTable();
+	});
+
+	var arrWorkDesc = {};
+	
+	var dateStartCtrlId = 'dateStart';
+	var dateStartCtrl = $('#' + dateStartCtrlId);	
+
+	var dateEndCtrlId = 'dateEnd';
+	var dateEndCtrl = $('#' + dateEndCtrlId);
+
+	dateStartCtrl.data("DateTimePicker").setDate(moment().startOf('month'));
+	dateEndCtrl.data("DateTimePicker").setDate(moment().endOf('month'));
+
+	function onSetDate(e) {
+		if (dateStartCtrl.data('DateTimePicker') == undefined ||
+			dateEndCtrl.data('DateTimePicker') == undefined) {
+			return;
+	}
+
+	pickerType = e.target.id;		
+
+	if (pickerType == dateStartCtrlId) {
+		dateEndCtrl.data('DateTimePicker').setMinDate(e.date);
+	} else {
+		dateStartCtrl.data('DateTimePicker').setMaxDate(e.date);
+	}
+
+	generateTable();
+}
+
+function generateTable() {
+	var workingDaysCtrl = $('#workingDays');
+	workingDaysCtrl.empty();
+
+	var startDate = new moment(dateStartCtrl.data('DateTimePicker').getDate());
+	var endDate = new moment(dateEndCtrl.data('DateTimePicker').getDate());	
+
+	randHours = generateRandomNumbers(endDate.diff(startDate, 'days'));
+	var idx = 0;
+
+	while (startDate <= endDate) {
+		if (startDate.isoWeekday() !== 6 && startDate.isoWeekday() !== 7) {
+			currDayStr = startDate.format('L');
+
+			var span = $('<span>').append(currDayStr);
+
+			if (arrWorkDesc[currDayStr] == undefined) {
+				arrWorkDesc[currDayStr] = $('<input type="text" class="form-control input_work_desc" style="width: 700px;display: inline;margin-left: 2px;margin-right: 2px;margin-bottom: 2px;">');
+			}		
+
+			var workDesc = arrWorkDesc[currDayStr];
+			workDesc.val(workDescription);
+
+			var hours = $('<input type="text" class="form-control" style="width: 50px;display: inline;margin-left: 2px;margin-right: 2px;margin-bottom: 2px;">');
+			hours.val(randHours[idx++]);
+
+			var li = $('<li>');
+			li.append(span).append(workDesc).append(hours);
+			workingDaysCtrl.append($('<div class="form-inline">').append(li));
+		}
+
+		startDate = startDate.add(1, 'days');	    	
+	}
+}
+
+function getRandomNumberInterval(low, high) {
+	return low + Math.floor((Math.random() * (high - low)) + 1)
+}
+
+function generateRandomNumbers(count) {	
+	var randNumbers = Array(count);
+	var defaultMinWorkHours = 1;
+	var defaultMaxWorkHours = 10;
+
+	var sum = 0;
+
+	for (var i = 0; i < count; i++) {
+		randNumbers[i] = getRandomNumberInterval(defaultMinWorkHours, defaultMaxWorkHours);
+
+		sum += randNumbers[i];
+	}
+
+	console.log(randNumbers);
+
+	remainToDistribute = 8 * count - sum;
+
+	console.log("Distribuiting " + remainToDistribute);
+
+	while (remainToDistribute > 0) {
+
+		var randNbr = getRandomNumberInterval(defaultMinWorkHours, defaultMaxWorkHours);
+
+		if (randNbr > remainToDistribute) {
+			randNbr = remainToDistribute;
+		}
+
+		do {		
+			var sampleIndex =  Math.floor((Math.random() * (count - 1)) + 1);
+			var sampleValue = randNumbers[sampleIndex];
+
+		} while (sampleValue + randNbr > defaultMaxWorkHours);
+
+		randNumbers[sampleIndex] += randNbr;
+		remainToDistribute -= randNbr;
+	}
+
+	console.log(randNumbers);
+	return randNumbers;
+}
+
+</script>
+
+</body>
