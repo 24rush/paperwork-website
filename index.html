@@ -153,7 +153,7 @@ function getRandomNumberInterval(low, high) {
 function generateRandomNumbers(count) {	
 	var randNumbers = Array(count);
 	var defaultMinWorkHours = 1;
-	var defaultMaxWorkHours = 10;
+	var defaultMaxWorkHours = 11;
 
 	var sum = 0;
 
@@ -170,14 +170,13 @@ function generateRandomNumbers(count) {
 	console.log("Distribuiting " + remainToDistribute);
 
 	while (remainToDistribute > 0) {
-
-		var randNbr = getRandomNumberInterval(defaultMinWorkHours, defaultMaxWorkHours);
-
-		if (randNbr > remainToDistribute) {
-			randNbr = remainToDistribute;
-		}
-
 		do {		
+			var randNbr = getRandomNumberInterval(defaultMinWorkHours, defaultMaxWorkHours);
+
+			if (randNbr > remainToDistribute) {
+				randNbr = remainToDistribute;
+			}
+
 			var sampleIndex =  Math.floor((Math.random() * (count - 1)) + 1);
 			var sampleValue = randNumbers[sampleIndex];
 
@@ -188,6 +187,13 @@ function generateRandomNumbers(count) {
 	}
 
 	console.log(randNumbers);
+
+	sum = 0;
+	for (var i = 0; i < count; i++) {		
+		sum += randNumbers[i];
+	}
+	console.log(sum);
+
 	return randNumbers;
 }
 
