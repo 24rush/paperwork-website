@@ -120,7 +120,7 @@ var vm = new function () {
 				if (arrWorkDesc[currDayStr] == undefined) {
 					console.log('undef'+currDayStr+!$("#chkAllMonthDesc").checked);
 					arrWorkDesc[currDayStr] = $('<input type="text" class="form-control input_work_desc" style="width: 700px;display: inline;margin-left: 2px;margin-right: 2px;margin-bottom: 2px;">');
-					$(".input_work_desc").prop('disabled', !$("#chkAllMonthDesc").checked);	    
+					$(".input_work_desc").prop('disabled', $("#chkAllMonthDesc").checked);	    
 				}		
 
 				var workDesc = arrWorkDesc[currDayStr];
@@ -147,8 +147,9 @@ var vm = new function () {
 		var csvContent = "";
 
 		$(".work_list li").each(function (elem) {
-			var kids = $(this).children();
-			csvContent += $(kids[0]).text() + ",\"" + $(kids[1]).val() + "\"," + $(kids[2]).val() + "\r\n";
+			var kids = $(this).children();			
+			var workDesc = $(kids[1]).val().replace(',', ' ');
+			csvContent += $(kids[0]).text() + "," + workDesc + "," + $(kids[2]).val() + ",\r\n";
 		});
 
 		$("#csvContent").text(csvContent);

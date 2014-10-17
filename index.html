@@ -1,7 +1,8 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title>Fise de lucru</title>
+	<title>Fișe de lucru</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<!-- build:css css/cycletome.min.css -->	
 	<link href="css/style.css" rel='stylesheet' type='text/css' />
 	<link rel="stylesheet" type="text/css" media="screen" href="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/css/bootstrap-datetimepicker.min.css">
@@ -21,15 +22,15 @@
 	<div class="top-grids">
 		<div class="top-grids-head text-center">									
 			<div class="panel panel-default" style="width: 60%;margin: 0 auto;">
-				<div class="panel-heading">Generator fise de lucru</div>
+				<div class="panel-heading">Generator fișe de lucru</div>
 				<div class="panel-body" style="text-align: left;">
 					<div class="form-inline">
-						<span>inceput</span>
+						<span>început</span>
 						<div class='input-group date' id='dateStart'>
 							<input type='text' class="form-control" />
 							<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 						</div>
-						<span>sfarsit</span>
+						<span>sfârşit</span>
 						<div class='input-group date' id='dateEnd'>									
 							<input type='text' class="form-control" />
 							<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
@@ -44,9 +45,9 @@
 					</div>				
 
 					<div style="margin-top: 14px;">
-						<button id="openCSVModalBtn" class="btn btn-primary btn-lg" style="margin-top: -20px;">Generate CSV</button>
+						<button id="openCSVModalBtn" class="btn btn-primary btn-lg" style="margin-top: -20px;">Generare CSV</button>
 						<div style="display: inline-block; margin-left: 5px;">
-							<div><span>Numar curent de ore: </span><span class="label label-success" id="totalWorkHours"></span></div>
+							<div><span>Număr curent de ore: </span><span class="label label-success" id="totalWorkHours"></span></div>
 							<div><span>Necesar de ore: </span><span class="label label-default" id="requiredWorkHours"></span></div>
 						</div>
 					</div>
@@ -64,14 +65,14 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Inchide</span></button>
-					<h4 class="modal-title" id="myModalLabel">Fisa de lucru - CSV</h4>
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Închide</span></button>
+					<h4 class="modal-title" id="myModalLabel">Fişă de lucru - CSV</h4>
 				</div>
 				<div class="modal-body">
 					<span id="csvContent" style="white-space: pre-wrap;"/> 
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>        
+					<button type="button" class="btn btn-default" data-dismiss="modal">Închide</button>        
 				</div>
 			</div>
 		</div>
